@@ -23,8 +23,8 @@ export class EmailService {
       // gmail needs unique app password
       service: 'gmail',
       auth: {
-        user: payload.sender.email,
-        pass: payload.sender.password,
+        user: this.configService.sender.email,
+        pass: this.configService.sender.pass,
       },
     });
 

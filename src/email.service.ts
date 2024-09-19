@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { Logger } from '@nestjs/common';
 import { STATUS_CODES } from 'http';
+import configuration from './config/configuration';
 
 export interface EmailPayload {
   sender: { name: string; email: string; password: string };
@@ -15,7 +16,7 @@ export interface EmailPayload {
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService<typeof configuration>) {}
 
   async sendEmail(payload: EmailPayload) {
     // create reusable transporter object using the default SMTP transport
@@ -23,8 +24,8 @@ export class EmailService {
       // gmail needs unique app password
       service: 'gmail',
       auth: {
-        user: this.configService.sender.email,
-        pass: this.configService.sender.pass,
+        user: this.configService.get('sender.email'),
+        pass: this.configService.get('sender.pass'),
       },
     });
 
